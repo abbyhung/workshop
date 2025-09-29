@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>線上購物系統-商品資訊</title>
+
+	<script src="/javascripts/common/imports.js"></script>
+</head>
+
+<body>
+
+	<div id="product-info">
+		<store-header></store-header>
+		<b-card title="商品查詢">
+			<b-form inline>
+				<label class="mr-sm-2" for="product-name">商品名稱：</label>
+				<b-form-input id="product-name" class="mb-2 mr-sm-2 mb-sm-0" placeholder="可模糊查詢"
+					v-model="params.name"></b-form-input>
+				<label class="mr-sm-2" for="product-category">商品分類：</label>
+				<b-form-input id="product-category" class="mb-2 mr-sm-2 mb-sm-0" placeholder="可模糊查詢"
+					v-model="params.category"></b-form-input>
+
+				<b-button variant="primary" @click="query"><i class="fa-solid fa-magnifying-glass"></i></b-button>
+			</b-form>
+		</b-card>
+		<b-card title="查詢結果">
+			<b-form-checkbox-group v-model="selected" 
+				:options="filterCategorys" class="mb-3"
+				@change="categoryChange"></b-form-checkbox-group>
+			<div id="product-list-section" class="row no-gutters">
+				<div class="col-md-4 mb-4 p-2" v-for="product in products" :key="product.productId">
+					<product-order-block :product-id="product.productId" @cart-updated="getCart"
+						@cart-open="openPage"></product-order-block>
+				</div>
+			</div>
+		</b-card>
+	</div>
+
+
+	<script src="/javascripts/common/util.js"></script>
+	<script src="/javascripts/store/product-info.js"></script>
+
+</body>
+
+</html>

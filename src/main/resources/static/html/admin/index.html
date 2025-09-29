@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>後台管理</title>
+
+	<script src="/javascripts/common/imports.js"></script>
+
+	<script type="module" src="/javascripts/admin/index.js"></script>
+</head>
+
+<body>
+	<div id="admin">
+		<admin-header></admin-header>
+		<b-card title="訂單查詢">
+			<b-form inline>
+				<b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0" v-model="unship">未出貨</b-form-checkbox>
+
+				<b-button variant="primary" @click="query"><i class="fa-solid fa-magnifying-glass"></i></b-button>
+			</b-form>
+		</b-card>
+		<b-card>
+			<el-table :data="tableData" style="width: 100%" max-height="250">
+				<el-table-column label="訂單編號" width="120">
+					<template slot-scope="scope">
+						<b-link :href="`${baseUrl}/order-info.html?orderId=${scope.row.orderId}`" target="_blank">
+							{{ scope.row.orderId }}
+						</b-link>
+						
+						
+					</template>
+				</el-table-column>
+				<el-table-column prop="date" label="訂單日期" width="120">
+				</el-table-column>
+				<el-table-column prop="custName" label="姓名" width="120">
+				</el-table-column>
+				<el-table-column prop="custNumber" label="電話" width="120">
+				</el-table-column>
+				<el-table-column prop="custShip" label="店名" width="120">
+				</el-table-column>
+				<el-table-column prop="totalAmount" label="總金額" width="120">
+				</el-table-column>
+				<el-table-column prop="statusDescription" label="狀態" width="120">
+				</el-table-column>
+				<el-table-column label="操作" width="120">
+					<template slot-scope="scope">
+						<b-button v-if="scope.row.status == 'CREATED'" variant="danger" @click="deleteOrder(scope.row)">
+							<i class="fa fa-trash"></i></b-button>
+						<b-button variant="success" title="出貨" @click="doShip(scope.row)">
+							<i class="fa-solid fa-truck-fast"></i>
+						</b-button>
+					</template>
+				</el-table-column>
+			</el-table>
+		</b-card>
+	</div>
+
+	<script src="/javascripts/common/util.js"></script>
+
+</body>
+
+</html>

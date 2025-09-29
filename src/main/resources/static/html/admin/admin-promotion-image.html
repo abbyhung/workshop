@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>後台管理</title>
+
+	<script src="/javascripts/common/imports.js"></script>
+
+	<link rel="stylesheet" href="/styles/admin/admin-promotion-image.css">
+</head>
+
+<body>
+
+	<div id="admin-promotion-image">
+		<admin-header></admin-header>
+		<div class="card">
+			<div class="card-header">上方圖片管理</div>
+			<div class="card-body">
+				<form @submit.prevent="addPromoImage">
+					<div class="form-group">
+						<label for="imageUrl">圖片網址 (Image URL)</label>
+						<input type="url" v-model="newPromoImage.imageUrl" class="form-control" required>
+					</div>
+					<button type="submit" class="btn btn-info">新增圖片</button>
+				</form>
+				<hr>
+				<h5>現有圖片列表</h5>
+				<table class="table table-hover align-middle">
+					<thead>
+						<tr>
+							<th style="width: 15%;">預覽</th>
+							<th>圖片網址</th>
+							<th style="width: 10%;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="image in promoImages" :key="image.id">
+							<td>
+								<img :src="image.imageUrl" class="img-thumbnail" alt="預覽" style="max-height: 120px;">
+							</td>
+							<td class="url-cell">
+								<span>{{ image.imageUrl }}</span>
+							</td>
+							<td>
+								<button @click="deletePromoImage(image.id)" class="btn btn-sm btn-danger">
+									<i class="fa-solid fa-trash"></i>
+								</button>
+							</td>
+						</tr>
+						<tr v-if="promoImages.length === 0">
+							<td colspan="3" class="text-center text-muted">目前沒有任何圖片</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<script src="/javascripts/common/util.js"></script>
+	<script src="/javascripts/admin/admin-promotion-image.js"></script>
+
+</body>
+
+</html>

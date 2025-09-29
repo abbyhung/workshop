@@ -1,0 +1,125 @@
+/* 浮動購物車按鈕本體 */
+.floating-cart-btn {
+	/* 1. 定位設定 */
+	position: fixed;
+	/* 固定定位，不隨頁面滾動 */
+	bottom: 30px;
+	/* 距離底部 30px */
+	right: 30px;
+	/* 距離右側 30px */
+	z-index: 1000;
+	/* 確保它在最上層，不會被其他元素蓋住 */
+
+	/* 2. 外觀設定 */
+	width: 60px;
+	/* 設定寬度 */
+	height: 60px;
+	/* 設定高度 */
+	background-color: #007bff;
+	/* 按鈕背景色 (Bootstrap primary color) */
+	color: white;
+	/* 圖示顏色 */
+	border-radius: 50%;
+	/* 關鍵！讓正方形變成圓形 */
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+	/* 加上陰影增加立體感 */
+
+	/* 3. 內容置中 (使用 Flexbox) */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	/* 4. 動畫效果 */
+	transition: all 0.3s ease;
+}
+
+/* 滑鼠移上去時的樣式 */
+.floating-cart-btn:hover {
+	transform: scale(1.1);
+	/* 稍微放大 */
+	color: white;
+	text-decoration: none;
+}
+
+/* 圖示大小 */
+.floating-cart-btn .fa-shopping-cart {
+	font-size: 24px;
+}
+
+/* 紅點數量徽章 */
+.cart-badge {
+	/* 1. 定位設定 */
+	position: absolute;
+	/* 相對於父元素 (.floating-cart-btn) 定位 */
+	top: -5px;
+	/* 向上偏移一點 */
+	right: -5px;
+	/* 向右偏移一點 */
+
+	/* 2. 外觀設定 */
+	background-color: #dc3545;
+	/* 紅色 (Bootstrap danger color) */
+	color: white;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	font-size: 12px;
+	font-weight: bold;
+	border: 2px solid white;
+	/* 加上白色邊框更好看 */
+
+	/* 3. 內容置中 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.action-btn {
+	/* 1. 定位設定 */
+	position: fixed;
+	/* 固定定位，不隨頁面滾動 */
+	bottom: 100px;
+	/* 距離底部 30px */
+	right: 30px;
+	/* 距離右側 30px */
+	z-index: 1000;
+	/* 確保它在最上層，不會被其他元素蓋住 */
+	/* 外觀設定 */
+	width: 60px;
+	height: 60px;
+	background-color: #007bff;
+	/* 預設背景色 */
+	color: white !important;
+	/* 確保圖示是白色的 */
+	border-radius: 50%;
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+
+	/* 內容置中 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	/* 動畫效果 */
+	transition: all 0.3s ease;
+
+	/* 取消 BootstrapVue 按鈕預設的 padding */
+	padding: 0;
+}
+
+/* 讓 BootstrapVue 的按鈕也符合樣式 */
+.action-btn.btn-success {
+	background-color: #28a745;
+	/* 覆蓋 b-button 的顏色 */
+}
+
+/* 滑鼠移上去時的樣式 */
+.action-btn:hover {
+	transform: scale(1.1);
+	color: white !important;
+	text-decoration: none;
+}
+
+/* 按鈕內圖示的大小 */
+.action-btn i {
+	font-size: 24px;
+}

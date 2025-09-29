@@ -1,0 +1,13 @@
+.url-cell {
+    /* 設定一個最大寬度，避免它無限延伸 */
+    max-width: 300px; 
+    
+    /* 強制文字不換行 */
+    white-space: nowrap;
+    
+    /* 隱藏超出範圍的文字 */
+    overflow: hidden;
+    
+    /* 當文字被隱藏時，顯示省略號 (...) */
+    text-overflow: ellipsis;
+}

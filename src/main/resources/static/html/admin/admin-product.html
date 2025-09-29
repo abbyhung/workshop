@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>後台管理</title>
+
+	<script src="/javascripts/common/imports.js"></script>
+</head>
+
+<body>
+
+	<div id="admin-product">
+		<admin-header></admin-header>
+		<b-card title="商品查詢">
+			<b-form inline>
+				<label class="mr-sm-2" for="product-name">商品名稱：</label>
+				<b-form-input id="product-name" class="mb-2 mr-sm-2 mb-sm-0" placeholder="可模糊查詢"
+					v-model="params.name"></b-form-input>
+				<label class="mr-sm-2" for="product-category">商品分類：</label>
+				<b-form-input id="product-category" class="mb-2 mr-sm-2 mb-sm-0" placeholder="可模糊查詢"
+					v-model="params.category"></b-form-input>
+				<label class="mr-sm-2" for="product-description">商品描述：</label>
+				<b-form-input id="product-description" class="mb-2 mr-sm-2 mb-sm-0" placeholder="可模糊查詢"
+					v-model="params.description"></b-form-input>
+
+				<b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0" v-model="params.published">上架中</b-form-checkbox>
+
+				<b-button variant="primary" @click="query"><i class="fa-solid fa-magnifying-glass"></i></b-button>
+				&nbsp;
+				<b-button variant="primary" @click="openModal('new')"><i class="fa-solid fa-plus"></i></b-button>
+			</b-form>
+		</b-card>
+		<b-card title="查詢結果">
+			<el-table :data="tableData" style="width: 100%" max-height="250">
+				<el-table-column fixed="left" label="操作" width="300">
+					<template slot-scope="scope">
+						<b-button variant="primary" title="編輯" @click="openModal('edit', scope.row)">
+							<i class="fa-solid fa-pencil"></i>
+						</b-button>
+
+						<b-button variant="danger" title="刪除" @click="deleteProduct(scope.row.productId)">
+							<i class="fa-solid fa-trash-can"></i>
+						</b-button>
+
+						<b-button variant="info" title="更新庫存" id="restock" @click="openRestockModal(scope.row)">
+							<i class="fa-solid fa-box"></i>
+						</b-button>
+
+						<b-button title="查詢庫存">
+							<i class="fa-solid fa-boxes-stacked" @click="openStockRecordModal(scope.row.productId)"></i>
+						</b-button>
+						<b-button variant="success" title="上架" v-if="!scope.row.published"
+							@click="setProductPublish(scope.row)">
+							<i class="fa-solid fa-toggle-on"></i>
+						</b-button>
+
+						<b-button variant="warning" title="下架" v-if="scope.row.published"
+							@click="setProductPublish(scope.row)">
+							<i class="fa-solid fa-toggle-off"></i>
+						</b-button>
+					</template>
+				</el-table-column>
+				<el-table-column prop="name" label="商品名稱" width="120">
+				</el-table-column>
+				<el-table-column prop="description" label="商品描述" width="120">
+				</el-table-column>
+				<el-table-column prop="category" label="分類" width="120" :filters="filterCategorys"
+					:filter-method="filterHandler">
+				</el-table-column>
+				<el-table-column prop="price" label="售價" width="120">
+				</el-table-column>
+				<el-table-column prop="totalStock" label="庫存量" width="120">
+				</el-table-column>
+				<el-table-column prop="preOrderStock" label="待出貨" width="120">
+				</el-table-column>
+			</el-table>
+		</b-card>
+
+		<!-- 新增/編輯商品 -->
+		<b-modal id="modal-prevent-closing" ref="modal" title="商品管理" @ok="handleOk" v-model="showEditProductModal">
+			<b-card>
+				<b-form ref="editProductForm">
+					<b-form-group label="商品名稱:" label-for="product-name">
+						<b-form-input id="product-name" v-model="editRequest.name" required
+							:state="validationState.name"></b-form-input>
+						<b-form-invalid-feedback :state="validationState.name">
+							商品名稱為必填項目。
+						</b-form-invalid-feedback>
+					</b-form-group>
+
+					<b-form-group label="商品描述:" label-for="product-description">
+						<b-form-textarea id="product-description" v-model="editRequest.description" required
+							rows="2"></b-form-textarea>
+						<b-form-invalid-feedback :state="validationState.description">
+							商品描述為必填項目。
+						</b-form-invalid-feedback>
+					</b-form-group>
+
+					<b-row>
+						<b-col md="6">
+							<b-form-group label="分類:" label-for="product-category">
+								<b-form-input id="product-category" v-model.number="editRequest.category" required
+									min="1" :state="validationState.category"></b-form-input>
+								<b-form-invalid-feedback :state="validationState.category">
+									分類為必填項目。
+								</b-form-invalid-feedback>
+							</b-form-group>
+						</b-col>
+						<b-col md="6">
+							<b-form-group label="售價:" label-for="product-price">
+								<b-form-input id="product-price" v-model.number="editRequest.price" type="number"
+									required min="1" :state="validationState.price"></b-form-input>
+								<b-form-invalid-feedback :state="validationState.price">
+									售價必須大於 0。
+								</b-form-invalid-feedback>
+							</b-form-group>
+						</b-col>
+					</b-row>
+
+					<b-row v-if="actionType == 'new'">
+						<b-col md="6">
+							<b-form-group label="成本:" label-for="product-cost">
+								<b-form-input id="product-cost" v-model.number="editRequest.cost" type="number" required
+									min="1" :state="validationState.cost"></b-form-input>
+								<b-form-invalid-feedback :state="validationState.cost">
+									成本必須大於 0。
+								</b-form-invalid-feedback>
+							</b-form-group>
+						</b-col>
+						<b-col md="6">
+							<b-form-group label="庫存數量:" label-for="product-quantity">
+								<b-form-input id="product-quantity" v-model.number="editRequest.quantity" type="number"
+									required min="1" :state="validationState.quantity"></b-form-input>
+								<b-form-invalid-feedback :state="validationState.quantity">
+									庫存量必須大於 0。
+								</b-form-invalid-feedback>
+							</b-form-group>
+						</b-col>
+					</b-row>
+				</b-form>
+			</b-card>
+		</b-modal>
+
+		<!-- 更新庫存 -->
+		<b-modal id="modal-prevent-closing" ref="modal" title="更新庫存" @ok="restock" v-model="showRestockModal">
+			<b-card>
+				<b-form ref="restockForm">
+					<b-form-group label="商品名稱:" label-for="product-name">
+						<b-form-input id="product-name" v-model="editRequest.name" readonly></b-form-input>
+					</b-form-group>
+
+					<b-form-group label="商品描述:" label-for="product-description">
+						<b-form-textarea id="product-description" v-model="editRequest.description" readonly
+							rows="2"></b-form-textarea>
+					</b-form-group>
+
+					<b-row>
+						<b-col md="6">
+							<b-form-group label="分類:" label-for="product-category">
+								<b-form-input id="product-category" v-model="editRequest.category" readonly
+									min="1"></b-form-input>
+							</b-form-group>
+						</b-col>
+						<b-col md="6">
+							<b-form-group label="售價:" label-for="product-price">
+								<b-form-input id="product-price" v-model.number="editRequest.price" type="number"
+									readonly></b-form-input>
+							</b-form-group>
+						</b-col>
+					</b-row>
+
+					<b-row>
+						<b-col md="6">
+							<b-form-group label="成本:" label-for="product-cost">
+								<b-form-input id="product-cost" v-model.number="editRequest.cost" type="number" required
+									min="1" :state="validationState.cost2"></b-form-input>
+								<b-form-invalid-feedback :state="validationState2.cost">
+									成本必須大於 0。
+								</b-form-invalid-feedback>
+							</b-form-group>
+						</b-col>
+						<b-col md="6">
+							<b-form-group label="庫存數量:" label-for="product-quantity">
+								<b-form-input id="product-quantity" v-model.number="editRequest.quantity" type="number"
+									required min="1" :state="validationState2.quantity"></b-form-input>
+								<b-form-invalid-feedback :state="validationState2.quantity">
+									庫存量必須大於 0。
+								</b-form-invalid-feedback>
+							</b-form-group>
+						</b-col>
+					</b-row>
+				</b-form>
+			</b-card>
+		</b-modal>
+
+		<!-- 庫存記錄 -->
+		<b-modal id="modal-prevent-closing" ref="modal" title="庫存記錄" v-model="showStockRecordModal">
+			<el-table :data="stockRecord" style="width: 100%" max-height="250">
+				<el-table-column prop="date" label="時間" width="120">
+				</el-table-column>
+				<el-table-column prop="cost" label="成本" width="120">
+				</el-table-column>
+				<el-table-column prop="quantity" label="數量" width="120">
+				</el-table-column>
+			</el-table>
+		</b-modal>
+	</div>
+
+
+	<script src="/javascripts/common/util.js"></script>
+	<script src="/javascripts/admin/admin-product.js"></script>
+
+</body>
+
+</html>

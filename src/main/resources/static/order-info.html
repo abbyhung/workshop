@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>線上購物系統-訂單資訊</title>
+
+	<script src="/javascripts/common/imports.js"></script>
+
+	<link rel="stylesheet" href="/styles/order-info.css">
+</head>
+
+<body>
+	<div id="app">
+		<b-card header="訂購資訊">
+			<b-form>
+				<b-row>
+					<b-col md="6">
+						<b-form-group label="訂單編號：" label-for="order-id">
+							<b-form-input id="order-id" v-model.trim="order.orderId" readonly>
+								</b--form-input>
+						</b-form-group>
+					</b-col>
+					<b-col md="6">
+						<b-form-group label="訂購人姓名：" label-for="cust-name">
+							<b-form-input id="cust-name" v-model.trim="order.custName" readonly>
+								</b--form-input>
+						</b-form-group>
+					</b-col>
+				</b-row>
+
+				<b-row>
+					<b-col md="6">
+						<b-form-group label="電話：" label-for="cust-number">
+							<b-form-input id="cust-number" v-model.trim="order.custNumber" readonly>
+							</b-form-input>
+						</b-form-group>
+					</b-col>
+					<b-col md="6">
+						<b-form-group label="7-11超商取貨店名：" label-for="cust-ship">
+							<b-form-input id="cust-ship" v-model.trim="order.custShip" readonly>
+							</b-form-input>
+						</b-form-group>
+					</b-col>
+				</b-row>
+
+				<b-form-group label="備註：" label-for="comment">
+					<b-form-textarea id="comment" v-model="order.comment" rows="3" readonly>
+					</b-form-textarea>
+				</b-form-group>
+			</b-form>
+			<b-table striped hover :items="order.details" :fields="fields" foot-clone>
+
+				<template #cell(quantity)="{ item }">
+					<b-form-input type="number" v-model.number="item.quantity" style="width: 100%;text-align: right;"
+						readonly>
+					</b-form-input>
+				</template>
+
+				<template #cell(subtotal)="{ item }">
+					${{ item.unitprice * item.quantity }}
+				</template>
+
+				<template #foot(subtotal)>
+					<span class="font-weight-bold h5 text-danger">總金額: ${{ order.totalAmount }}</span>
+				</template>
+
+				<template #foot()="data">
+					&nbsp;
+				</template>
+			</b-table>
+		
+			<b-row id="hidden-button">
+				<b-button variant="success" @click="print">列印</b-button>
+				<b-button variant="primary" @click="returnHomePage">回首頁</b-button>
+			</b-row>
+		</b-card>
+	</div>
+	
+	<script src="/javascripts/common/util.js"></script>
+	<script src="/javascripts/store/order-info.js"></script>
+
+</body>
+
+</html>

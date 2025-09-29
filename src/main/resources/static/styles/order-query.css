@@ -1,0 +1,15 @@
+/* @media print 區塊裡的所有樣式，只會在列印或預覽列印時生效 */
+@media print {
+
+    /* 選取您要隱藏的按鈕區塊 */
+    #hidden-button {
+        display: none !important;
+    }
+    
+    /* (可選) 您也可以在這裡隱藏其他不想被列印出來的元素，例如網站的 header 或 footer */
+    /*
+    .main-header {
+        display: none !important;
+    }
+    */
+}
