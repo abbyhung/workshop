@@ -97,6 +97,65 @@ cd [專案資料夾名稱]
 | `POST`| `/api/admin/promotions` | (後台) 新增一張行銷圖片 |
 | `DELETE`| `/api/admin/promotions/{id}`| (後台) 刪除一張行銷圖片 |
 
+## 資料實體圖
+erDiagram
+    PRODUCT_MAIN {
+        Long productId PK "商品編號"
+        String name "商品名稱"
+        String description "商品描述"
+        String category "分類"
+        Integer price "售價"
+        boolean published "是否上架"
+    }
+
+    PRODUCT_STOCK {
+        Long stockId PK "庫存流水號"
+        Long productId FK "商品編號"
+        LocalDateTime date "入庫日期"
+        Integer cost "成本"
+        Integer quantity "數量"
+    }
+
+    OPERATE_HISTORY {
+        Long id PK "紀錄流水號"
+        Long productId FK "商品編號"
+        OperationType operationType "操作類型"
+        Integer quantityChange "數量變化"
+        LocalDateTime operationTime "操作時間"
+    }
+
+    ORDER_MAIN {
+        Long orderId PK "訂單編號"
+        LocalDateTime date "訂單時間"
+        String custName "客戶姓名"
+        String custNumber "客戶電話"
+        String custShip "出貨店名"
+        String comment "備註"
+        OrderStatusType status "狀態"
+        Integer totalAmount "總金額"
+    }
+
+    ORDER_DETAIL {
+        Long id PK "明細流水號"
+        Long orderId FK "訂單編號"
+        Long productId FK "商品編號"
+        Integer unitprice "單價"
+        Integer quantity "數量"
+        Integer amount "小計"
+    }
+
+    PROMOTION_IMAGE {
+        Long id PK "圖片流水號"
+        String imageUrl "圖片網址"
+        int displayOrder "顯示順序"
+    }
+
+    ' Relationships '
+    PRODUCT_MAIN ||--|{ PRODUCT_STOCK : "擁有多筆"
+    PRODUCT_MAIN ||--|{ OPERATE_HISTORY : "擁有多筆"
+    ORDER_MAIN ||--|{ ORDER_DETAIL : "包含"
+    PRODUCT_MAIN }o--|| ORDER_DETAIL : "關聯一項"
+
 ## 未來計畫 (To-Do)
 - [ ] 實作後台登入與 Spring Security 整合
 
