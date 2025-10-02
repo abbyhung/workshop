@@ -5,17 +5,17 @@
 ## 專案預覽 (Screenshots)
 
 **前台首頁**
-![前台首頁預覽](請在此處插入您的前台首頁截圖，例如 image_1adbe8.jpg)
+![前台首頁預覽](請在此處插入您的前台首頁截圖)
 
 **後台管理頁面**
-![後台管理頁面預覽](請在此處插入您的後台管理頁面截圖，例如 image_9d1e53.png)
+![後台管理頁面預覽](請在此處插入您的後台管理頁面截圖)
 
 ## 主要功能 (Features)
 
 ### 後台管理
 - [x] **行銷圖片管理**：新增、刪除網站首頁上方的行銷圖片。
 - [x] **商品管理**：新增、編輯、刪除商品基本資料。
-- [x] **簡易庫存管理**：進出貨紀錄。
+- [x] **簡易庫存管理**：獨立的庫存進出貨紀錄。
 - [x] **訂單管理**：查詢訂單、更新訂單狀態（例如：標示為已出貨）。
 
 ### 前台網站
@@ -39,17 +39,14 @@
     * Spring Web
     * Spring Data JPA (Hibernate)
     * Jakarta Bean Validation
-
 * **前端 (Frontend)**
     * Vue.js 2
     * BootstrapVue
     * Element UI (for Admin)
     * Font Awesome
     * http-vue-loader (for loading `.vue` components without a build step)
-
 * **資料庫 (Database)**
     * H2 Database (開發用)
-
 * **建置工具 (Build Tool)**
     * Maven
 
@@ -85,19 +82,21 @@ cd [專案資料夾名稱]
 
 ## API 端點 (API Endpoints)
 
-| 方法 | URL | 說明 |
-| :--- | :--- | :--- |
-| `GET` | `/api/products` | (前台) 獲取所有已上架商品 |
-| `GET` | `/api/promotions` | (前台) 獲取所有行銷圖片 |
-| `POST`| `/api/orders` | (前台) 建立一筆新訂單 |
-| `GET` | `/api/orders/query` | (前台) 查詢訂單 |
-| `GET` | `/api/admin/products` | (後台) 獲取所有商品 (含庫存) |
-| `POST`| `/api/admin/products/create`| (後台) 新增商品與初始庫存 |
-| `GET` | `/api/admin/promotions` | (後台) 獲取所有行銷圖片 |
-| `POST`| `/api/admin/promotions` | (後台) 新增一張行銷圖片 |
-| `DELETE`| `/api/admin/promotions/{id}`| (後台) 刪除一張行銷圖片 |
+| 方法   | URL                           | 說明                     |
+| :----- | :---------------------------- | :----------------------- |
+| `GET`  | `/api/products`               | (前台) 獲取所有已上架商品 |
+| `GET`  | `/api/promotions`             | (前台) 獲取所有行銷圖片   |
+| `POST` | `/api/orders`                 | (前台) 建立一筆新訂單     |
+| `GET`  | `/api/orders/query`           | (前台) 查詢訂單           |
+| `GET`  | `/api/admin/products`         | (後台) 獲取所有商品 (含庫存) |
+| `POST` | `/api/admin/products/create`  | (後台) 新增商品與初始庫存 |
+| `GET`  | `/api/admin/promotions`       | (後台) 獲取所有行銷圖片   |
+| `POST` | `/api/admin/promotions`       | (後台) 新增一張行銷圖片   |
+| `DELETE`| `/api/admin/promotions/{id}`| (後台) 刪除一張行銷圖片   |
 
-## 資料實體圖
+## 資料實體圖 (ERD)
+
+```mermaid
 erDiagram
     PRODUCT_MAIN {
         Long productId PK "商品編號"
@@ -155,9 +154,12 @@ erDiagram
     PRODUCT_MAIN ||--|{ OPERATE_HISTORY : "擁有多筆"
     ORDER_MAIN ||--|{ ORDER_DETAIL : "包含"
     PRODUCT_MAIN }o--|| ORDER_DETAIL : "關聯一項"
+```
 
 ## 未來計畫 (To-Do)
 - [ ] 實作後台登入與 Spring Security 整合
+- [ ] 完成商品編輯與刪除完整流程
+- [ ] 完成訂單管理（狀態更新、出貨）功能
 
 ## 授權 (License)
-[MIT](https://choosealicense.com/licenses/mit/)
+本專案採用 [MIT](https://choosealicense.com/licenses/mit/) 授權條款。
