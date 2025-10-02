@@ -12,18 +12,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ah.workshop.dto.OrderInfoRequest;
-import com.ah.workshop.dto.ProductQureyResult;
 import com.ah.workshop.service.OrderService;
-import com.ah.workshop.service.ProductService;
 
 import jakarta.validation.Valid;
 
+/**
+ * 處理前台相關的 API Controller。
+ * <p>
+ * 基礎路徑為 /api/orders
+ * @version 1.0
+ * @since 2025-10-02
+ * @author abbyhung
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-
-    @Autowired
-    private ProductService productService;
 
     @Autowired
     private OrderService orderService;

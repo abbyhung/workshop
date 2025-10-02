@@ -160,11 +160,13 @@ const cart = new Vue({
 				},
 				body: JSON.stringify(params)
 			})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('請求失敗，HTTP 狀態碼：' + response.status);
+				.then(async response => {
+					if (response.ok) {
+						return response.text();
+					} else {
+						const errorData = await response.json();
+						throw new Error(errorData.message || '發生未知錯誤');
 					}
-					return response.text();
 				})
 				.then(successMessage => {
 					alert("訂購成功!");

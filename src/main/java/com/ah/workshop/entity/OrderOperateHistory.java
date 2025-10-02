@@ -11,6 +11,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+/**
+ * 訂單操作記錄實體
+ * 
+ * @version 1.0
+ * @since 2025-10-02
+ * @author abbyhung
+ */
 @Entity
 @Data
 public class OrderOperateHistory {

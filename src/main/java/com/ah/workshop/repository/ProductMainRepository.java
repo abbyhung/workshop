@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import com.ah.workshop.dto.ProductQureyResult;
 import com.ah.workshop.entity.ProductMain;
 
+/**
+ * 商品主檔Repository
+ */
 public interface ProductMainRepository extends JpaRepository<ProductMain, Long> {
     /**
      * 根據商品名稱、描述、分類進行模糊查詢，並篩選上架狀態。
@@ -33,6 +36,11 @@ public interface ProductMainRepository extends JpaRepository<ProductMain, Long> 
 			@Param("category") String category, @Param("published") boolean published);
 	
 
+	/**
+	 * 根據商品ID查詢商品資訊
+	 * @param productId
+	 * @return
+	 */
 	@Query( "SELECT NEW com.ah.workshop.dto.ProductQureyResult( "
 	      + "       pm.productId, pm.name, pm.description, "
           + "       pm.category, pm.price, pm.published, "

@@ -33,7 +33,7 @@
 			</b-form>
 		</b-card>
 		<b-card title="查詢結果">
-			<el-table :data="tableData" style="width: 100%" max-height="250">
+			<el-table :data="tableData" style="width: 100%" max-height="80vh">
 				<el-table-column fixed="left" label="操作" width="300">
 					<template slot-scope="scope">
 						<b-button variant="primary" title="編輯" @click="openModal('edit', scope.row)">

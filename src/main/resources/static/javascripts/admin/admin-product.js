@@ -62,6 +62,7 @@ const adminApp = new Vue({
 			}
 		},
 
+		// 篩選分類
 		filterCategorys() {
 			if (!this.tableData || this.tableData.length === 0) {
 				return [];
@@ -147,6 +148,7 @@ const adminApp = new Vue({
 			// Trigger submit handler
 			this.handleSubmit()
 		},
+		// 新增商品
 		handleSubmit() {
 			// Exit when the form isn't valid
 			if (!this.checkFormValidity()) {
@@ -164,30 +166,28 @@ const adminApp = new Vue({
 				},
 				body: JSON.stringify(vm.editRequest)
 			})
-				.then(response => {
-					// 5. 檢查後端的回應是否成功 (HTTP 狀態碼為 2xx)
-					if (!response.ok) {
-						// 如果不成功 (例如後端驗證失敗回傳 400)，則拋出錯誤
-						throw new Error('請求失敗，HTTP 狀態碼：' + response.status);
+				.then(async response => {
+					if (response.ok) {
+						return response.text();
+					} else {
+						const errorData = await response.json();
+						throw new Error(errorData.message || '發生未知錯誤');
 					}
-					// 6. 讀取純文字的回應，因為後端回傳的是 "更新成功" 字串
-					return response.text();
 				})
 				.then(successMessage => {
 					// 7. 成功後續處理
 					console.log('後端成功回應:', successMessage); // 會印出 "更新成功"
-					alert('商品新增成功！');
-					// 在這裡可以接續處理，例如：
-					// vm.resetForm(); // 清空表單
+					alert('操作成功！');
 					vm.query(); // 重新整理商品列表
 					vm.showEditProductModal = !vm.showEditProductModal;
 				})
 				.catch(error => {
 					// 8. 捕獲並處理任何過程中發生的錯誤
 					console.error('新增商品時發生錯誤:', error);
-					alert('新增商品失敗，請查看 Console 中的詳細錯誤訊息。');
+					alert('操作商品失敗，請查看 Console 中的詳細錯誤訊息。');
 				});
 		},
+		// 更新商品上/下架狀態
 		setProductPublish(item) {
 			var vm = this;
 			vm.editRequest.name = item.name;
@@ -202,27 +202,27 @@ const adminApp = new Vue({
 				},
 				body: JSON.stringify(vm.editRequest)
 			})
-				.then(response => {
-					// 5. 檢查後端的回應是否成功 (HTTP 狀態碼為 2xx)
-					if (!response.ok) {
-						// 如果不成功 (例如後端驗證失敗回傳 400)，則拋出錯誤
-						throw new Error('請求失敗，HTTP 狀態碼：' + response.status);
+				.then(async response => {
+					if (response.ok) {
+						return response.text();
+					} else {
+						const errorData = await response.json();
+						throw new Error(errorData.message || '發生未知錯誤');
 					}
-					// 6. 讀取純文字的回應，因為後端回傳的是 "更新成功" 字串
-					return response.text();
 				})
 				.then(successMessage => {
 					// 7. 成功後續處理
 					console.log('後端成功回應:', successMessage); // 會印出 "更新成功"
-					alert('操作成功！');
+					alert('更新商品上/下架狀態成功！');
 					vm.query(); // 重新整理商品列表
 				})
 				.catch(error => {
 					// 8. 捕獲並處理任何過程中發生的錯誤
-					console.error('新增商品時發生錯誤:', error);
-					alert('新增商品失敗，請查看 Console 中的詳細錯誤訊息。');
+					console.error('更新商品上/下架狀態時發生錯誤:', error);
+					alert('更新商品上/下架狀態失敗，請查看 Console 中的詳細錯誤訊息。');
 				});
 		},
+		// 刪除商品
 		deleteProduct(productId) {
 			var vm = this;
 			const url = `/api/admin/products/deleteProduct?id=${productId}`;
@@ -231,27 +231,27 @@ const adminApp = new Vue({
 			fetch(url, {
 				method: 'POST'
 			})
-				.then(response => {
-					// 5. 檢查後端的回應是否成功 (HTTP 狀態碼為 2xx)
-					if (!response.ok) {
-						// 如果不成功 (例如後端驗證失敗回傳 400)，則拋出錯誤
-						throw new Error('請求失敗，HTTP 狀態碼：' + response.status);
+				.then(async response => {
+					if (response.ok) {
+						return response.text();
+					} else {
+						const errorData = await response.json();
+						throw new Error(errorData.message || '發生未知錯誤');
 					}
-					// 6. 讀取純文字的回應，因為後端回傳的是 "更新成功" 字串
-					return response.text();
 				})
 				.then(successMessage => {
 					// 7. 成功後續處理
 					console.log('後端成功回應:', successMessage); // 會印出 "更新成功"
-					alert('操作成功！');
+					alert('刪除成功！');
 					vm.query(); // 重新整理商品列表
 				})
 				.catch(error => {
 					// 8. 捕獲並處理任何過程中發生的錯誤
-					console.error('新增商品時發生錯誤:', error);
-					alert('新增商品失敗，請查看 Console 中的詳細錯誤訊息。');
+					console.error('刪除商品時發生錯誤:', error);
+					alert('刪除商品失敗，請查看 Console 中的詳細錯誤訊息。');
 				});
 		},
+		// 進貨
 		restock(bvModalEvent) {
 			// Prevent modal from closing
 			bvModalEvent.preventDefault()
@@ -267,28 +267,28 @@ const adminApp = new Vue({
 				},
 				body: JSON.stringify(vm.editRequest)
 			})
-				.then(response => {
-					// 5. 檢查後端的回應是否成功 (HTTP 狀態碼為 2xx)
-					if (!response.ok) {
-						// 如果不成功 (例如後端驗證失敗回傳 400)，則拋出錯誤
-						throw new Error('請求失敗，HTTP 狀態碼：' + response.status);
+				.then(async response => {
+					if (response.ok) {
+						return response.text();
+					} else {
+						const errorData = await response.json();
+						throw new Error(errorData.message || '發生未知錯誤');
 					}
-					// 6. 讀取純文字的回應，因為後端回傳的是 "更新成功" 字串
-					return response.text();
 				})
 				.then(successMessage => {
 					// 7. 成功後續處理
 					console.log('後端成功回應:', successMessage); // 會印出 "更新成功"
-					alert('操作成功！');
+					alert('庫存更新成功！');
 					vm.showRestockModal = !vm.showRestockModal;
 					vm.query(); // 重新整理商品列表
 				})
 				.catch(error => {
 					// 8. 捕獲並處理任何過程中發生的錯誤
-					console.error('新增商品時發生錯誤:', error);
-					alert('新增商品失敗，請查看 Console 中的詳細錯誤訊息。');
+					console.error('庫存更新時發生錯誤:', error);
+					alert('庫存更新失敗，請查看 Console 中的詳細錯誤訊息。');
 				});
 		},
+		// 打開庫存記錄modal並查詢
 		openStockRecordModal(productId) {
 			var vm = this;
 			// 使用 URLSearchParams 來安全地建立查詢字串
