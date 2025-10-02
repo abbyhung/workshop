@@ -75,25 +75,11 @@ cd [專案資料夾名稱]
 
 ### 4. 訪問頁面 (Access Frontend)
 * **前台商店首頁**：[http://localhost:8080/](http://localhost:8080/)
-* **後台管理頁面範例**：[http://localhost:8080/admin/promoImageManage.html](http://localhost:8080/admin/promoImageManage.html)
+* **後台管理頁面範例**：[http://localhost:8080/html/admin/admin-product.html](http://localhost:8080/html/admin/admin-product.html)
 * **H2 資料庫後台**：[http://localhost:8080/h2-console](http://localhost:8080/h2-console)
     * JDBC URL: `jdbc:h2:file:./data/workshop`
     * User Name: `sa`
     * Password: (空白)
-
-## API 端點 (API Endpoints)
-
-| 方法   | URL                           | 說明                     |
-| :----- | :---------------------------- | :----------------------- |
-| `GET`  | `/api/products`               | (前台) 獲取所有已上架商品 |
-| `GET`  | `/api/promotions`             | (前台) 獲取所有行銷圖片   |
-| `POST` | `/api/orders`                 | (前台) 建立一筆新訂單     |
-| `GET`  | `/api/orders/query`           | (前台) 查詢訂單           |
-| `GET`  | `/api/admin/products`         | (後台) 獲取所有商品 (含庫存) |
-| `POST` | `/api/admin/products/create`  | (後台) 新增商品與初始庫存 |
-| `GET`  | `/api/admin/promotions`       | (後台) 獲取所有行銷圖片   |
-| `POST` | `/api/admin/promotions`       | (後台) 新增一張行銷圖片   |
-| `DELETE`| `/api/admin/promotions/{id}`| (後台) 刪除一張行銷圖片   |
 
 ## 資料實體圖 (ERD)
 
@@ -116,12 +102,16 @@ erDiagram
         Integer quantity "數量"
     }
 
-    OPERATE_HISTORY {
+    PRODUCT_OPERATE_HISTORY {
         Long id PK "紀錄流水號"
         Long productId FK "商品編號"
         OperationType operationType "操作類型"
-        Integer quantityChange "數量變化"
         LocalDateTime operationTime "操作時間"
+        Long stockId FK "庫存流水號"
+        Long orderId FK "訂單編號"
+        Integer cost "成本"
+        Integer price "售價"
+        Integer quantity "數量"
     }
 
     ORDER_MAIN {
@@ -144,6 +134,13 @@ erDiagram
         Integer amount "小計"
     }
 
+    ORDER_OPERATE_HISTORY {
+        Long id PK "流水號"
+        Long orderId FK "訂單編號"
+        LocalDateTime operationTime "操作時間"
+        OrderOperationType operate "操作類型"
+    }
+
     PROMOTION_IMAGE {
         Long id PK "圖片流水號"
         String imageUrl "圖片網址"
@@ -153,9 +150,13 @@ erDiagram
     %% --- 修正點：將單引號改為 %% ---
     %% Relationships 
     PRODUCT_MAIN ||--|{ PRODUCT_STOCK : "擁有多筆"
-    PRODUCT_MAIN ||--|{ OPERATE_HISTORY : "擁有多筆"
+    PRODUCT_MAIN ||--|{ PRODUCT_OPERATE_HISTORY : "擁有多筆"
     ORDER_MAIN ||--|{ ORDER_DETAIL : "包含"
+    ORDER_MAIN ||--|{ ORDER_OPERATE_HISTORY : "擁有多筆"
     PRODUCT_MAIN }o--|| ORDER_DETAIL : "關聯一項"
+
+    ORDER_MAIN }o--|| PRODUCT_OPERATE_HISTORY : "關聯一項"
+    PRODUCT_STOCK }o--|| PRODUCT_OPERATE_HISTORY : "關聯一項"
 ```
 
 ## 未來計畫 (To-Do)
