@@ -5,10 +5,11 @@
 ## 專案預覽 (Screenshots)
 
 **前台首頁**
-![前台首頁預覽](請在此處插入您的前台首頁截圖)
+![image](https://upload.cc/i1/2025/10/02/3CNxo4.jpg)
+![image](https://upload.cc/i1/2025/10/02/2deC9T.jpg)
 
 **後台管理頁面**
-![後台管理頁面預覽](請在此處插入您的後台管理頁面截圖)
+![image](https://upload.cc/i1/2025/10/02/btBrZ6.jpg)
 
 ## 主要功能 (Features)
 
@@ -149,7 +150,8 @@ erDiagram
         int displayOrder "顯示順序"
     }
 
-    ' Relationships '
+    %% --- 修正點：將單引號改為 %% ---
+    %% Relationships 
     PRODUCT_MAIN ||--|{ PRODUCT_STOCK : "擁有多筆"
     PRODUCT_MAIN ||--|{ OPERATE_HISTORY : "擁有多筆"
     ORDER_MAIN ||--|{ ORDER_DETAIL : "包含"
@@ -157,9 +159,7 @@ erDiagram
 ```
 
 ## 未來計畫 (To-Do)
-- [ ] 實作後台登入與 Spring Security 整合
-- [ ] 完成商品編輯與刪除完整流程
-- [ ] 完成訂單管理（狀態更新、出貨）功能
+- [ ] 實作後台登入
 
 ## 授權 (License)
 本專案採用 [MIT](https://choosealicense.com/licenses/mit/) 授權條款。
