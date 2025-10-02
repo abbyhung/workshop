@@ -16,6 +16,14 @@ import com.ah.workshop.dto.ProductQureyResult;
 import com.ah.workshop.entity.ProductStock;
 import com.ah.workshop.service.ProductService;
 
+/**
+ * 處理後台商品管理相關的 API Controller。
+ * <p>
+ * 基礎路徑為 /api/admin/products
+ * @version 1.0
+ * @since 2025-10-02
+ * @author abbyhung
+ */
 @RestController
 @RequestMapping("/api/admin/products")
 public class AdminProductController {
@@ -24,9 +32,13 @@ public class AdminProductController {
     private ProductService productService;
 
     /**
-     * 查詢
-     * @param request
-     * @return
+     * 根據條件模糊搜尋商品列表，並包含庫存總數。
+     *
+     * @param name        商品名稱關鍵字 (可選)
+     * @param description 商品描述關鍵字 (可選)
+     * @param category    商品分類關鍵字 (可選)
+     * @param published   是否上架 (預設為 true)
+     * @return 符合條件的商品 DTO 列表
      */
     @GetMapping("/query")
     public List<ProductQureyResult> queryProduct(
@@ -38,20 +50,22 @@ public class AdminProductController {
     }
 
     /**
-     * 查詢
-     * @param request
-     * @return
+     * 根據商品 ID 精準查詢單一商品資訊 (包含庫存總數)。
+     *
+     * @param productId 商品 ID (必填)
+     * @return 單一商品的 DTO
      */
     @GetMapping("/queryOne")
-    public List<ProductQureyResult> queryOne(
+    public ProductQureyResult queryOne(
     		@RequestParam(required = true) Long productId) {
         return productService.findProduct(productId);
     }
 
     /**
-     * 查詢
-     * @param request
-     * @return
+     * 根據商品 ID 查詢該商品的所有庫存紀錄。
+     *
+     * @param productId 商品 ID (必填)
+     * @return 該商品的庫存紀錄列表
      */
     @GetMapping("/queryStockRecord")
     public List<ProductStock> queryStockRecord(
@@ -60,9 +74,10 @@ public class AdminProductController {
     }
 
     /**
-     * 新增商品
-     * @param request
-     * @return
+     * 建立一個新商品及其初始庫存。
+     *
+     * @param request 包含商品資料與初始庫存的請求 DTO
+     * @return 成功的文字訊息
      */
     @PostMapping("/create")
     public ResponseEntity<?> createProduct(@RequestBody ProductOperationRequest request) {
@@ -72,22 +87,23 @@ public class AdminProductController {
     }
 
     /**
-     * 更新商品描述
-     * @param request
-     * @return
+     * 更新一個已存在的商品基本資料。
+     *
+     * @param request 包含商品 ID 和要更新資料的請求 DTO
+     * @return 成功的文字訊息
      */
     @PostMapping("/update")
     public ResponseEntity<?> updateProduct(@RequestBody ProductOperationRequest request) {
         productService.updateProduct(request);
-
         return ResponseEntity.ok("更新成功");
     }
 
 
     /**
-     * 更新庫存
-     * @param request
-     * @return
+     * 為已存在的商品增加庫存 (進貨)。
+     *
+     * @param request 包含商品 ID 和進貨數量的請求 DTO
+     * @return 成功的文字訊息
      */
     @PostMapping("/restock")
     public ResponseEntity<?> restock(@RequestBody ProductOperationRequest request) {
@@ -97,9 +113,10 @@ public class AdminProductController {
 
 
     /**
-     * 刪除商品
-     * @param id
-     * @return
+     * 刪除一個商品。
+     *
+     * @param id 要刪除的商品 ID
+     * @return 成功的文字訊息
      */
     @PostMapping("/deleteProduct")
     public ResponseEntity<?> deleteProduct(@RequestParam Long id) {
@@ -109,9 +126,10 @@ public class AdminProductController {
 
 
     /**
-     * 上架/下架
-     * @param id
-     * @return
+     * 設定商品的上架或下架狀態。
+     *
+     * @param request 包含商品 ID 和 published 狀態的請求 DTO
+     * @return 成功的文字訊息
      */
     @PostMapping("/setProductPublish")
     public ResponseEntity<?> setProductPublish(@RequestBody ProductOperationRequest request) {

@@ -118,7 +118,8 @@ public class OrderService {
 	@Transactional
 	public void updateOrder(OrderInfoRequest request) {
 		Optional<OrderMain> optional = orderMainRepository.findById(request.getOrderId());
-		if(!optional.isPresent()) {return;}
+		if(!optional.isPresent()) 
+        	throw new OrderOperationException("查無訂單ID為「" + request.getOrderId() + "」！");
 		
 		LocalDateTime now = LocalDateTime.now();
 		// 更新訂單
@@ -154,6 +155,10 @@ public class OrderService {
 		orderOperateHistoryRepository.save(operateHistory);
 	}
 	
+	/**
+	 * 刪除訂單
+	 * @param orderId
+	 */
 	@Transactional
 	public void deleteOrder(Long orderId) {
 		Optional<OrderMain> optional = orderMainRepository.findById(orderId);
@@ -186,8 +191,14 @@ public class OrderService {
 	public void orderShip(Long orderId) {
 		Optional<OrderMain> optional = orderMainRepository.findById(orderId);
 
+		if(!optional.isPresent()) 
+        	throw new OrderOperationException("查無訂單ID為「" + orderId + "」！");
+		
         List<Long> orderIds = Arrays.asList(orderId);
         List<OrderDetail> allDetails = orderDetailRepository.findByOrderIdIn(orderIds);
+
+		if(allDetails.isEmpty()) 
+        	throw new OrderOperationException("訂單ID為「" + orderId + "」，無訂單明細無法出貨！");
         
         for (OrderDetail orderDetail : allDetails) {
             // 1. 針對最舊的庫存進行異動

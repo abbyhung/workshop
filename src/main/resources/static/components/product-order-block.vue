@@ -59,12 +59,10 @@ module.exports = {
 			fetch(`/api/admin/products/queryOne?${params.toString()}`)
 				.then(response => response.json())
 				.then(data => {
-					if (data && data.length > 0) {
-						vm.detail.name = data[0].name;
-						vm.detail.price = data[0].price;
-						vm.detail.totalStock = data[0].totalStock;
-						vm.detail.category = data[0].totalStock;
-					}
+					vm.detail.name = data.name;
+					vm.detail.price = data.price;
+					vm.detail.totalStock = data.totalStock;
+					vm.detail.category = data.totalStock;
 				})
 				.catch(error => console.error('查詢失敗:', error));
 

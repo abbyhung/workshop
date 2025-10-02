@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.ah.workshop.entity.OrderDetail;
 
 /**
- * 商品庫存Repository
+ * 訂單明細Repository
  */
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 	

@@ -34,15 +34,14 @@ const adminApp = new Vue({
                 // 4. 將 this.newPromoImage 這個 JavaScript 物件轉換成 JSON 字串，並放入請求的 body 中
                 body: JSON.stringify(this.newPromoImage)
             })
-            .then(response => {
-                // 5. 檢查後端的回應是否成功 (HTTP 狀態碼 200-299)
-                if (!response.ok) {
-                    // 如果不成功，可以顯示錯誤訊息
-                    alert('新增圖片失敗！請檢查 Console 錯誤訊息。');
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // 將成功的回應轉為 JSON
-            })
+            .then(async response => {
+					if (response.ok) {
+						return response.text();
+					} else {
+						const errorData = await response.json();
+						throw new Error(errorData.message || '發生未知錯誤');
+					}
+				})
             .then(savedImage => {
                 // 6. 成功後續處理
                 console.log('新增成功:', savedImage);

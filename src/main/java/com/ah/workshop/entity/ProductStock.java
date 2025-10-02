@@ -10,7 +10,11 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 /**
- * ProductMain: 商品庫存
+ * 商品庫存實體
+ * 
+ * @version 1.0
+ * @since 2025-10-02
+ * @author abbyhung
  */
 @Entity
 @Data

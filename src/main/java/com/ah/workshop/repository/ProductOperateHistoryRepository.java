@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.ah.workshop.entity.ProductOperateHistory;
 
+/**
+ * 商品操作記錄Repository
+ */
 public interface ProductOperateHistoryRepository extends JpaRepository<ProductOperateHistory, Long> {
 	/**
 	 * 根據商品 ID 查詢所有操作記錄，並依照操作日期由新至舊排序。

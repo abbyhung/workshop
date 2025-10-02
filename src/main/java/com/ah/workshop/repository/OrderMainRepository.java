@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ah.workshop.dto.ProductQureyResult;
 import com.ah.workshop.entity.OrderMain;
 import com.ah.workshop.entity.enums.OrderStatusType;
 
+/**
+ * 訂單主檔Repository
+ */
 public interface OrderMainRepository extends JpaRepository<OrderMain, Long> {
 	
 	//自動產生 WHERE orderId = ? OR custNumber = ? 的查詢

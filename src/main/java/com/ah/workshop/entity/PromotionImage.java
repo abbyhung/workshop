@@ -8,7 +8,11 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 /**
- * PromotionImage: 存放一頁式畫面上方展示商品的圖片
+ * 存放一頁式畫面上方展示商品的圖片網址實體
+ * 
+ * @version 1.0
+ * @since 2025-10-02
+ * @author abbyhung
  */
 @Entity
 @Data

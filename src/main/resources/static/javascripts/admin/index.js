@@ -20,12 +20,6 @@ const adminApp = new Vue({
 			const params = new URLSearchParams();
 			params.append('unship', vm.unship);
 
-			// 如果沒有任何查詢條件，則不發送請求
-			if (params.toString().length === 0) {
-				alert('請至少提供一個查詢條件！');
-				return;
-			}
-
 			// 3. 組合出最終的 URL
 			//    假設 Controller 的基礎路徑是 /api/orders
 			const url = `/api/admin/orders/query?${params.toString()}`;
@@ -45,6 +39,7 @@ const adminApp = new Vue({
 					alert('查詢訂單失敗！');
 				});
 		},
+		// 出貨
 		doShip(item) {
 			var vm = this;
 			const url = `/api/admin/orders/ship?id=${item.orderId}`;
